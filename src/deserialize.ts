@@ -1,4 +1,5 @@
 export interface NodeTypes {
+  image?: string;
   paragraph?: string;
   block_quote?: string;
   code_block?: string;
@@ -22,6 +23,7 @@ export interface OptionType {
 
 export interface MdastNode {
   type?: string;
+  alt?: string;
   ordered?: boolean;
   value?: string;
   text?: string;
@@ -37,6 +39,7 @@ export interface MdastNode {
 }
 
 export const defaultNodeTypes = {
+  image: 'image',
   paragraph: 'paragraph',
   block_quote: 'block_quote',
   code_block: 'code_block',
@@ -96,7 +99,9 @@ export default function deserialize(
     case 'paragraph':
       return { type: types.paragraph, children };
     case 'link':
-      return { type: types.link, link: node.url, children };
+      return { type: types.link, url: node.url, children };
+    case 'image':
+      return { type: types.image, url: node.url, alt: node.alt, children };
     case 'blockquote':
       return { type: types.block_quote, children };
     case 'code':

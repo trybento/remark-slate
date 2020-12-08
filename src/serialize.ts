@@ -13,7 +13,7 @@ export interface LeafType {
 export interface BlockType {
   type: string;
   parentType?: string;
-  link?: string;
+  url?: string;
   language?: string;
   break?: boolean;
   children: Array<BlockType | LeafType>;
@@ -179,7 +179,10 @@ export default function serialize(
       }\n${children}\n\`\`\`\n`;
 
     case nodeTypes.link:
-      return `[${children}](${(chunk as BlockType).link || ''})`;
+      return `[${children}](${(chunk as BlockType).url || ''})`;
+
+    case nodeTypes.image:
+      return `[${children}](${(chunk as BlockType).url || ''})`;
 
     case nodeTypes.ul_list:
     case nodeTypes.ol_list:
