@@ -44,9 +44,9 @@ export const defaultNodeTypes = {
   block_quote: 'block_quote',
   code_block: 'code_block',
   link: 'link',
-  ul_list: 'ul_list',
-  ol_list: 'ol_list',
-  listItem: 'list_item',
+  ul_list: 'bulleted-list',
+  ol_list: 'numbered-list',
+  listItem: 'list-item',
   heading: {
     1: 'heading_one',
     2: 'heading_two',
@@ -120,7 +120,7 @@ export default function deserialize(
         };
       }
       // TODO: Handle other HTML?
-      return { type: 'parapgraph', children: [{ text: '' }] };
+      return { type: 'html', children: [{ text: node.value }] };
 
     case 'emphasis':
       return {
