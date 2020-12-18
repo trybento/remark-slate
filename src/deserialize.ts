@@ -28,6 +28,7 @@ export interface MdastNode {
   ordered?: boolean;
   value?: string;
   text?: string;
+  attributes?: any;
   children?: Array<MdastNode>;
   depth?: 1 | 2 | 3 | 4 | 5 | 6;
   url?: string;
@@ -90,7 +91,7 @@ export default function deserialize(
     );
   }
 
-  const formatButton = (node) => {
+  const formatButton = (node: MdastNode) => {
     const type = 'button';
     const url = node.attributes?.url || '';
     const buttonText = node.children?.[0]?.value || '';
@@ -109,7 +110,7 @@ export default function deserialize(
     };
   };
 
-  const formatFileUpload = (node) => {
+  const formatFileUpload = (node: MdastNode) => {
     const type = 'file-select';
     const url = node.attributes?.url || '';
     const buttonText = node.children?.[0]?.value || '';
@@ -128,7 +129,7 @@ export default function deserialize(
     };
   };
 
-  const formatInputField = (node) => {
+  const formatInputField = (node: MdastNode) => {
     const type = 'input';
     const placeholder = node.children?.[0]?.value || '';
 
@@ -145,7 +146,7 @@ export default function deserialize(
     };
   };
 
-  const formatDropdown = (node) => {
+  const formatDropdown = (node: MdastNode) => {
     const type = 'select';
     const placeholder = node.children?.[0]?.value || '';
 
