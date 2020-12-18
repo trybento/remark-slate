@@ -23,6 +23,7 @@ export interface OptionType {
 
 export interface MdastNode {
   type?: string;
+  name?: string;
   alt?: string;
   ordered?: boolean;
   value?: string;
@@ -89,7 +90,99 @@ export default function deserialize(
     );
   }
 
+  const formatButton = (node) => {
+    const type = 'button';
+    const url = node.attributes?.url || '';
+    const buttonText = node.children?.[0]?.value || '';
+
+    const children = [
+      {
+        type: 'text',
+        text: buttonText,
+      },
+    ];
+
+    return {
+      type,
+      url,
+      children,
+    };
+  };
+
+  const formatFileUpload = (node) => {
+    const type = 'file-select';
+    const url = node.attributes?.url || '';
+    const buttonText = node.children?.[0]?.value || '';
+
+    const children = [
+      {
+        type: 'text',
+        text: buttonText,
+      },
+    ];
+
+    return {
+      type,
+      url,
+      children,
+    };
+  };
+
+  const formatInputField = (node) => {
+    const type = 'input';
+    const placeholder = node.children?.[0]?.value || '';
+
+    const children = [
+      {
+        type: 'text',
+        text: placeholder,
+      },
+    ];
+
+    return {
+      type,
+      children,
+    };
+  };
+
+  const formatDropdown = (node) => {
+    const type = 'select';
+    const placeholder = node.children?.[0]?.value || '';
+
+    const nodeAttributes = node.attributes || {};
+    const optionLabels = Object.values(nodeAttributes);
+    const children = optionLabels.map((label) => ({
+      type: 'option',
+      value: label, // allow setting actual values at a later time
+      children: [
+        {
+          type: 'text',
+          text: label,
+        },
+      ],
+    }));
+
+    return {
+      type,
+      placeholder,
+      children,
+    };
+  };
+
   switch (node.type) {
+    case 'textDirective':
+      switch (node.name) {
+        case 'button':
+          return formatButton(node);
+        case 'fileSelect':
+          return formatFileUpload(node);
+        case 'inputField':
+          return formatInputField(node);
+        case 'dropdown':
+          return formatDropdown(node);
+        default:
+          throw new Error('Unrecognized directive');
+      }
     case 'heading':
       return { type: types.heading[node.depth || 1], children };
     case 'list':
